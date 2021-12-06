@@ -1,0 +1,26 @@
+name: 'Violation Comments Action'
+description: 'Comment pull requests with comments from static code analysis.'
+#on:
+#  pull_request:
+#    types: [opened, synchronize, reopened]
+inputs:
+  accesstoken:
+    description: 'An access token with access to commenting pull requests.'
+    required: true
+  parser:
+    description: 'Se available parsers with `npx violation-comments-to-github-command-line --help` or README.'
+    required: true
+  regexp:
+    description: 'A regular expression matching report files from analysis. Something like `.*checkstyle/main\.xml$`'
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - name: Commenting PR
+      run: npx violation-comments-to-github-command-line \
+          -ot ${{ inputs.accesstoken }} \
+          -ro $(jq --raw-output .repo.owner.login "$GITHUB_EVENT_PATH") \
+          -rn $(jq --raw-output .repo.name "$GITHUB_EVENT_PATH") \
+          -prid $(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH") \
+          -v "${{ inputs.parser }}" "." "${{ inputs.regexp }}"
+      shell: bash
