@@ -10,16 +10,36 @@ inputs:
   regexp:
     description: 'A regular expression matching report files from analysis. Something like `.*checkstyle/main\.xml$`'
     required: true
+  commentOnlyChangedContent:
+    description: ''
+    required: false
+    default: true
+  commentOnlyChangedFiles:
+    description: ''
+    required: false
+    default: true
+  createSingleFileComments:
+    description: ''
+    required: false
+    default: true
+  createCommentWithAllSingleFileComments:
+    description: ''
+    required: false
+    default: false
 runs:
   using: "composite"
   steps:
     - name: Commenting PR
-      if: ${{ github.head_ref != github.base_ref }}
+      if: ${{ github.head_ref != github.base_ref }} # if it is a PR build
       run: |
         npx violation-comments-to-github-command-line \
           -ot ${{ github.token }} \
           -ro ${{ github.repository_owner }} \
           -rn ${{ github.event.repository.name }} \
           -prid ${{ github.event.pull_request.number }} \
+          -comment-only-changed-content ${{ inputs.commentOnlyChangedContent }} \
+          -comment-only-changed-files ${{ inputs.commentOnlyChangedFiles }} \
+          -create-comment-with-all-single-file-comments ${{ inputs.createCommentWithAllSingleFileComments }} \
+          -create-single-file-comments ${{ inputs.createSingleFileComments }} \
           -v "${{ inputs.parser }}" "." "${{ inputs.regexp }}" ""
       shell: bash
