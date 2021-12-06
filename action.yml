@@ -4,9 +4,6 @@ branding:
   icon: 'check'  
   color: 'green'
 inputs:
-  accesstoken:
-    description: 'An access token with access to commenting pull requests.'
-    required: true
   parser:
     description: 'Se available parsers with `npx violation-comments-to-github-command-line --help` or README.'
     required: true
@@ -17,11 +14,11 @@ runs:
   using: "composite"
   steps:
     - name: Commenting PR
-      if: $GITHUB_HEAD_REF != $GITHUB_BASE_REF
+      if: ${{ github.head_ref != github.base_ref }}
       run: |
-        echo "::add-mask::${{ inputs.accesstoken }}"
+        echo "::add-mask::${{ secrets.GITHUB_TOKEN }}"
         npx violation-comments-to-github-command-line \
-          -ot ${{ inputs.accesstoken }} \
+          -ot ${{ secrets.GITHUB_TOKEN }} \
           -ro $(jq --raw-output .repo.owner.login "$GITHUB_EVENT_PATH") \
           -rn $(jq --raw-output .repo.name "$GITHUB_EVENT_PATH") \
           -prid $(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH") \
