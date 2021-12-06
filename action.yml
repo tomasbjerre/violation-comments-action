@@ -1,8 +1,8 @@
 name: 'Violation Comments Action'
 description: 'Comment pull requests with comments from static code analysis.'
-#on:
-#  pull_request:
-#    types: [opened, synchronize, reopened]
+branding:
+  icon: 'check'  
+  color: 'green'
 inputs:
   accesstoken:
     description: 'An access token with access to commenting pull requests.'
@@ -17,6 +17,7 @@ runs:
   using: "composite"
   steps:
     - name: Commenting PR
+      if: ${{ github.event_name == 'pull_request' && (github.event.action == 'opened' || github.event.action == 'synchronize' || github.event.action == 'reopened') }}
       run: |
         echo "::add-mask::${{ inputs.accesstoken }}"
         npx violation-comments-to-github-command-line \
