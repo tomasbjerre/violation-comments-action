@@ -17,7 +17,9 @@ runs:
   using: "composite"
   steps:
     - name: Commenting PR
-      run: npx violation-comments-to-github-command-line \
+      run: |
+        echo "::add-mask::${{ inputs.accesstoken }}"
+        npx violation-comments-to-github-command-line \
           -ot ${{ inputs.accesstoken }} \
           -ro $(jq --raw-output .repo.owner.login "$GITHUB_EVENT_PATH") \
           -rn $(jq --raw-output .repo.name "$GITHUB_EVENT_PATH") \
