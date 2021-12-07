@@ -10,6 +10,10 @@ inputs:
   regexp:
     description: 'A regular expression matching report files from analysis. Something like `.*checkstyle/main\.xml$`'
     required: true
+  keepOldComments:
+    description: 'Keep, or remove, old comments.'
+    required: false
+    default: true
   commentOnlyChangedContent:
     description: ''
     required: false
@@ -37,6 +41,7 @@ runs:
           -ro ${{ github.repository_owner }} \
           -rn ${{ github.event.repository.name }} \
           -prid ${{ github.event.pull_request.number }} \
+          -keep-old-comments ${{ inputs.keepOldComments }} \
           -comment-only-changed-content ${{ inputs.commentOnlyChangedContent }} \
           -comment-only-changed-files ${{ inputs.commentOnlyChangedFiles }} \
           -create-comment-with-all-single-file-comments ${{ inputs.createCommentWithAllSingleFileComments }} \

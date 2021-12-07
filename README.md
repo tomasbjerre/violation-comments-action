@@ -19,6 +19,7 @@ Example:
   with:
     parser: FINDBUGS
     regexp: '.*spotbugs/main\.xml$'
+    keepOldComments: true
     commentOnlyChangedContent: true
     commentOnlyChangedFiles: true
     createSingleFileComments: true
