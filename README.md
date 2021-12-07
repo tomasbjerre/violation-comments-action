@@ -21,6 +21,7 @@ Example:
     regexp: '.*spotbugs/main\.xml$'
     # Optional config below
     keepOldComments: true
+    commentTemplate: '... see https://github.com/tomasbjerre/violation-comments-lib'
     maxNumberOfViolations: 99
     severity: INFO
     commentOnlyChangedContent: true
@@ -44,6 +45,26 @@ You may want to set `keepOldComments: false` first if you invoke it several time
     parser: CHECKSTYLE
     regexp: '.*checkstyle/main\.xml$'
     keepOldComments: true
+```
+
+You can se a custom template like this:
+
+```yml
+- name: create template
+  run: |
+    VIOLATION_TEMPLATE=$(cat << EOF
+{{violation.message}}
+    EOF
+    )
+    echo "VIOLATION_TEMPLATE<<EOF" >> $GITHUB_ENV
+    echo "$VIOLATION_TEMPLATE" >> $GITHUB_ENV
+    echo "EOF" >> $GITHUB_ENV
+- name: Spotbugs
+  uses: tomasbjerre/violation-comments-action@master
+  with:
+    parser: FINDBUGS
+    regexp: '.*spotbugs/main\.xml$'
+    commentTemplate: ${{ env.VIOLATION_TEMPLATE }}
 ```
 
 Also example [here](https://github.com/tomasbjerre/.github).

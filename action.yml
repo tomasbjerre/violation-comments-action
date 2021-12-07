@@ -22,6 +22,10 @@ inputs:
     description: 'Minimum severity to report. One of INFO, WARN or ERROR'
     required: false
     default: INFO
+  commentTemplate:
+    description: 'An optional template to use as comment'
+    required: false
+    default: ''
   commentOnlyChangedContent:
     description: ''
     required: false
@@ -52,6 +56,7 @@ runs:
           -keep-old-comments ${{ inputs.keepOldComments }} \
           -max-number-of-violations ${{ inputs.maxNumberOfViolations }} \
           -severity ${{ inputs.severity }} \
+          -comment-template ${{ inputs.commentTemplate }} \
           -comment-only-changed-content ${{ inputs.commentOnlyChangedContent }} \
           -comment-only-changed-files ${{ inputs.commentOnlyChangedFiles }} \
           -create-comment-with-all-single-file-comments ${{ inputs.createCommentWithAllSingleFileComments }} \
