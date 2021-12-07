@@ -19,11 +19,31 @@ Example:
   with:
     parser: FINDBUGS
     regexp: '.*spotbugs/main\.xml$'
+    # Optional config below
     keepOldComments: true
+    maxNumberOfViolations: 99
+    severity: INFO
     commentOnlyChangedContent: true
     commentOnlyChangedFiles: true
     createSingleFileComments: true
     createCommentWithAllSingleFileComments: false
+```
+
+You may want to set `keepOldComments: false` first if you invoke it several times in same pipeline:
+
+```yml
+- name: Spotbugs
+  uses: tomasbjerre/violation-comments-action@master
+  with:
+    parser: FINDBUGS
+    regexp: '.*spotbugs/main\.xml$'
+    keepOldComments: false
+- name: Checkstyle
+  uses: tomasbjerre/violation-comments-action@master
+  with:
+    parser: CHECKSTYLE
+    regexp: '.*checkstyle/main\.xml$'
+    keepOldComments: true
 ```
 
 Also example [here](https://github.com/tomasbjerre/.github).

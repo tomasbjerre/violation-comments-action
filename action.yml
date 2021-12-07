@@ -14,6 +14,14 @@ inputs:
     description: 'Keep, or remove, old comments.'
     required: false
     default: true
+  maxNumberOfViolations:
+    description: 'Maximum number of violations to report.'
+    required: false
+    default: 100
+  severity:
+    description: 'Minimum severity to report. One of INFO, WARN or ERROR'
+    required: false
+    default: INFO
   commentOnlyChangedContent:
     description: ''
     required: false
@@ -42,6 +50,8 @@ runs:
           -rn ${{ github.event.repository.name }} \
           -prid ${{ github.event.pull_request.number }} \
           -keep-old-comments ${{ inputs.keepOldComments }} \
+          -max-number-of-violations ${{ inputs.maxNumberOfViolations }} \
+          -severity ${{ inputs.severity }} \
           -comment-only-changed-content ${{ inputs.commentOnlyChangedContent }} \
           -comment-only-changed-files ${{ inputs.commentOnlyChangedFiles }} \
           -create-comment-with-all-single-file-comments ${{ inputs.createCommentWithAllSingleFileComments }} \
