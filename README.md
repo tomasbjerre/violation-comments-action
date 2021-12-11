@@ -1,6 +1,8 @@
 # Violation Comments Action
 
-This is a [GitHub action](https://docs.github.com/en/actions/creating-actions/about-custom-actions) to help using [Violation Comments To GitHub Command Line
+This is a [GitHub action](https://docs.github.com/en/actions/creating-actions/about-custom-actions) that can comment pull requests with results form static code analysis. It supports many different formats.
+
+It uses [Violation Comments To GitHub Command Line
 ](https://github.com/tomasbjerre/violation-comments-to-github-command-line). 
 
 ![comment](screenshot.png)
@@ -18,16 +20,26 @@ Example:
   uses: tomasbjerre/violation-comments-action@master
   with:
     parser: FINDBUGS
+    regexp: '.*spotbugs/main\.xml$'```yml
+```
+
+You may set some other optional options:
+
+```yml
+- name: Violation Comments Action
+  uses: tomasbjerre/violation-comments-action@master
+  with:
+    parser: FINDBUGS
     regexp: '.*spotbugs/main\.xml$'
     # Optional config below
-    keepOldComments: true
-    commentTemplate: '... see https://github.com/tomasbjerre/violation-comments-lib'
-    maxNumberOfViolations: 99
-    severity: INFO
-    commentOnlyChangedContent: true
-    commentOnlyChangedFiles: true
-    createSingleFileComments: true
-    createCommentWithAllSingleFileComments: false
+    keepOldComments: true # remove the old comments, or keep them
+    commentTemplate: '{{violation.message}}' # see https://github.com/tomasbjerre/violation-comments-lib
+    maxNumberOfViolations: 99 # Will only post this many comments
+    severity: INFO # INFO, WARN or ERROR
+    commentOnlyChangedContent: true # Comment only if violations in the changed part of PR
+    commentOnlyChangedFiles: true # Comment only on the files that are changed in PR
+    createSingleFileComments: true # Comment several comments, for each violation
+    createCommentWithAllSingleFileComments: false # Create on big comment with all violations
 ```
 
 You may want to set `keepOldComments: false` first if you invoke it several times in same pipeline:
@@ -86,6 +98,7 @@ A number of **parsers** have been implemented. Some **parsers** can parse output
 | [_CloudFormation Linter_](https://github.com/aws-cloudformation/cfn-lint)             | `JUNIT`              | `cfn-lint . -f junit --output-file report-junit.xml`
 | [_CodeClimate_](https://codeclimate.com/)                                             | `CODECLIMATE`        | 
 | [_CodeNarc_](http://codenarc.sourceforge.net/)                                        | `CODENARC`           | 
+| [_Dart_](https://dart.dev/)                                                           | `MACHINE`            | With `dart analyze --format=machine`
 | [_Detekt_](https://github.com/arturbosch/detekt)                                      | `CHECKSTYLE`         | With `--output-format xml`.
 | [_DocFX_](http://dotnet.github.io/docfx/)                                             | `DOCFX`              | 
 | [_Doxygen_](https://www.stack.nl/~dimitri/doxygen/)                                   | `CLANG`              | 
@@ -147,6 +160,6 @@ A number of **parsers** have been implemented. Some **parsers** can parse output
 | [_YAMLLint_](https://yamllint.readthedocs.io/en/stable/index.html)                    | `YAMLLINT`           | With `-f parsable`
 | [_ZPTLint_](https://pypi.python.org/pypi/zptlint)                                     | `ZPTLINT`            |
 
-47 parsers and 73 reporters.
+48 parsers and 74 reporters.
 
 Missing a format? Open an issue [here](https://github.com/tomasbjerre/violations-lib/issues)!
