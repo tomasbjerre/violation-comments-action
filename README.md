@@ -20,7 +20,7 @@ Example:
   uses: tomasbjerre/violation-comments-action@master
   with:
     parser: FINDBUGS
-    regexp: '.*spotbugs/main\.xml$'```yml
+    regexp: '.*spotbugs/main\.xml$'
 ```
 
 You may set some other optional options:
