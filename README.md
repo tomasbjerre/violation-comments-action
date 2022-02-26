@@ -59,7 +59,7 @@ You may want to set `keepOldComments: false` first if you invoke it several time
     keepOldComments: true
 ```
 
-You can se a custom template like this:
+You can set a [custom template](https://github.com/tomasbjerre/violation-comments-lib) like this:
 
 ```yml
 - name: create template
@@ -77,6 +77,14 @@ You can se a custom template like this:
     parser: FINDBUGS
     regexp: '.*spotbugs/main\.xml$'
     commentTemplate: ${{ env.VIOLATION_TEMPLATE }}
+```
+
+To make it run only on pull requests, you can do:
+
+```yml
+jobs:
+  static-code-analysis:
+    if: ${{ github.event_name == 'pull_request' || github.head_ref != github.base_ref }} # if it is a PR build
 ```
 
 Also example [here](https://github.com/tomasbjerre/.github).
