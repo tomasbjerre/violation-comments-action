@@ -1,5 +1,9 @@
 # Violation Comments Action
 
+--------------------
+Archived, see motivation here https://github.com/tomasbjerre/violation-comments-to-github-lib
+--------------------
+
 This is a [GitHub action](https://docs.github.com/en/actions/creating-actions/about-custom-actions) that can comment pull requests with results form static code analysis. It supports many different formats.
 
 It uses [Violation Comments To GitHub Command Line
