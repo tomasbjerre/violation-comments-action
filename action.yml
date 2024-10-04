@@ -1,65 +1,28 @@
-name: 'Violation Comments Action'
-description: 'Comment pull requests with comments from static code analysis.'
+name: 'Violations Action'
+description: 'Decorate repository (pull requests and Code scanning) with static code analysis.'
 branding:
   icon: 'check'  
   color: 'green'
 inputs:
   parser:
-    description: 'Se available parsers with `npx violation-comments-to-github-command-line --help` or README.'
+    description: 'Se available parsers with `npx violations-command-line --help`.'
     required: true
   regexp:
     description: 'A regular expression matching report files from analysis. Something like `.*checkstyle/main\.xml$`'
     required: true
-  keepOldComments:
-    description: 'Keep, or remove, old comments.'
-    required: false
-    default: true
-  maxNumberOfViolations:
-    description: 'Maximum number of violations to report.'
-    required: false
-    default: 100
-  severity:
-    description: 'Minimum severity to report. One of INFO, WARN or ERROR'
-    required: false
-    default: INFO
-  commentTemplate:
-    description: 'An optional template to use as comment'
-    required: false
-    default: ''
-  commentOnlyChangedContent:
-    description: ''
-    required: false
-    default: true
-  commentOnlyChangedFiles:
-    description: ''
-    required: false
-    default: true
-  createSingleFileComments:
-    description: ''
-    required: false
-    default: true
-  createCommentWithAllSingleFileComments:
-    description: ''
-    required: false
-    default: false
 runs:
   using: "composite"
   steps:
-    - name: Commenting PR
-      if: ${{ github.head_ref != github.base_ref }} # if it is a PR build
-      run: |
-        npx violation-comments-to-github-command-line \
-          -ot ${{ github.token }} \
-          -ro ${{ github.repository_owner }} \
-          -rn ${{ github.event.repository.name }} \
-          -prid ${{ github.event.pull_request.number }} \
-          -keep-old-comments ${{ inputs.keepOldComments }} \
-          -max-number-of-violations ${{ inputs.maxNumberOfViolations }} \
-          -severity ${{ inputs.severity }} \
-          -comment-template ${{ inputs.commentTemplate }} \
-          -comment-only-changed-content ${{ inputs.commentOnlyChangedContent }} \
-          -comment-only-changed-files ${{ inputs.commentOnlyChangedFiles }} \
-          -create-comment-with-all-single-file-comments ${{ inputs.createCommentWithAllSingleFileComments }} \
-          -create-single-file-comments ${{ inputs.createSingleFileComments }} \
-          -v "${{ inputs.parser }}" "." "${{ inputs.regexp }}" ""
-      shell: bash
+      - name: Transorm static code analysis to SARIF
+        if: ${{ (success() || failure()) }}
+        run: |
+          npx violations-command-line -sarif sarif-report.json \
+          -v "FINDBUGS" "." ".*build/reports/spotbugs/main\.xml$" "Spotbugs" \
+          -v "CHECKSTYLE" "." ".*build/reports/checkstyle/main\.xml$" "Checkstyle" \
+          -v "PMD" "." ".*build/reports/pmd/main\.xml$" "PMD" \
+          -v "JUNIT" "." ".*/build/test-results/test/TEST-.*\.xml$" "JUNIT"
+      - uses: github/codeql-action/upload-sarif@v3
+        if: ${{ (success() || failure()) }}
+        with:
+          sarif_file: sarif-report.json
+          category: violations-lib
