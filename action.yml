@@ -1,5 +1,5 @@
 name: 'Violations Action'
-description: 'Decorate repository (pull requests and Code scanning) with static code analysis.'
+description: 'Decorate repository (pull requests and code scanning) with static code analysis.'
 branding:
   icon: 'check'  
   color: 'green'
