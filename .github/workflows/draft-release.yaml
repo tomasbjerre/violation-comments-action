@@ -1,0 +1,7 @@
+name: Draft release
+
+on: [workflow_dispatch, push]
+
+jobs:
+  call-workflow:
+    uses: tomasbjerre/.github/.github/workflows/draft-release.yaml@master
