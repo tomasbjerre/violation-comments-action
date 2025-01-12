@@ -18,10 +18,7 @@ runs:
       shell: bash
       run: |
         npx violations-command-line -sarif sarif-report.json \
-        -v "FINDBUGS" "." ".*build/reports/spotbugs/main\.xml$" "Spotbugs" \
-        -v "CHECKSTYLE" "." ".*build/reports/checkstyle/main\.xml$" "Checkstyle" \
-        -v "PMD" "." ".*build/reports/pmd/main\.xml$" "PMD" \
-        -v "JUNIT" "." ".*/build/test-results/test/TEST-.*\.xml$" "JUNIT"
+          -v "${{ inputs.parser }}" "." "${{ inputs.regexp }}" "${{ inputs.parser }}"
     - uses: github/codeql-action/upload-sarif@v3
       if: ${{ (success() || failure()) }}
       with:

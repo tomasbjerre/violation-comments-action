@@ -2,16 +2,14 @@
 
 This is a [GitHub action](https://docs.github.com/en/actions/creating-actions/about-custom-actions) that can decorate repository (pull requests and code scanning) with static code analysis.
 
+This might work for very simple use cases. Using the [command line tool](https://github.com/tomasbjerre/violation-comments-to-github-command-line) directly in a shell step ist probably best in most cases.
+
 It uses [Violations Command Line
 ](https://github.com/tomasbjerre/violations-command-line/tree/master). If you want a more advanced use case, perhaps you should use that command line tool in your action.
 
 ![comment](screenshot.png)
 
 ## Usage
-
-Parsers and parameters are documented in the command line tool:
-
-<https://github.com/tomasbjerre/violation-comments-to-github-command-line>
 
 Example:
 
