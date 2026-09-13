@@ -5,7 +5,7 @@ branding:
   color: 'green'
 inputs:
   parser:
-    description: 'Se available parsers with `npx violations-command-line --help`.'
+    description: 'See available parsers with `npx violations-command-line --help`.'
     required: true
   regexp:
     description: 'A regular expression matching report files from analysis. Something like `.*checkstyle/main\.xml$`'
@@ -13,13 +13,13 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Transorm static code analysis to SARIF
+    - name: Transform static code analysis to SARIF
       if: ${{ (success() || failure()) }}
       shell: bash
       run: |
         npx violations-command-line -sarif sarif-report.json \
           -v "${{ inputs.parser }}" "." "${{ inputs.regexp }}" "${{ inputs.parser }}"
-    - uses: github/codeql-action/upload-sarif@v3
+    - uses: github/codeql-action/upload-sarif@v4
       if: ${{ (success() || failure()) }}
       with:
         sarif_file: sarif-report.json
