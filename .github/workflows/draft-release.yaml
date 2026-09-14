@@ -4,4 +4,4 @@ on: [workflow_dispatch, push]
 
 jobs:
   call-workflow:
-    uses: tomasbjerre/.github/.github/workflows/draft-release.yaml@master
+    uses: tomasbjerre/.github/.github/workflows/bundle-draft-release.yaml@master
