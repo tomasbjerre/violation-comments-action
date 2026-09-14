@@ -1,5 +1,7 @@
 # Violation Comments Action
 
+[![Marketplace](https://img.shields.io/badge/marketplace-violations--action-blue?logo=github)](https://github.com/marketplace/actions/violations-action)
+
 This is a [GitHub action](https://docs.github.com/en/actions/creating-actions/about-custom-actions) that can decorate repository (pull requests and code scanning) with static code analysis.
 
 This might work for very simple use cases. Using the [command line tool](https://github.com/tomasbjerre/violations-command-line), in combination with `github/codeql-action/upload-sarif`, directly in a shell step is probably best in most cases. See how that is done in [action.yml](/action.yml).
